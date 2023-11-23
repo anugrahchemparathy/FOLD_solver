@@ -1,0 +1,8 @@
+*.o
+main
+
+
+.DS_Store
+.vscode/
+
+/scratch/
