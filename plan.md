@@ -14,13 +14,13 @@ save edges
 ---
 ### Setup
 create 
-- A: new adjacency graph
+- A: new adjacency list representation of connected vertices
 - B: list of edges, one copy in each direction
     - we will remove edges as they are processed
 - C: list of unique edges (one total per edge) storing a vector of polygons 
 
 
-iterate over edges (B), creating polygons
+iterate over edges (B), creating polygons using the adjacency list in (A)
 - for every polygon we see, add it to the corresponding entries in (C) for every edge
 
 ---
