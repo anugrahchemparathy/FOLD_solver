@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 
-#include <typeinfo>
 #include <nlohmann/json.hpp>
 #include "storage_objects.h"
 

@@ -2,19 +2,20 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <nlohmann/json.hpp>
-#include "storage_objects.h"
 
-using json = nlohmann::json;
-using namespace std;
+
+#include "storage_objects.h"
+#include "parse_FOLD.h"
 
 
 // main function
 int main() {
     std::cout << "hello world" << std::endl;
+    parsed_fold skeleton = load_fold_file();
+    std::cout << "skeleton failed = " << skeleton.failed << std::endl;
+    std::cout << "skeleton num_edges = " << skeleton.num_edges << " & num_vertices = " << skeleton.num_vertices << std::endl; 
 
-    point_t mypoint = {1,2};
-    std::cout << point_2_string(mypoint) << endl;
+
 
     return 0;
 }
