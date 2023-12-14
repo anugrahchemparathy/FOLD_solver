@@ -9,6 +9,11 @@
 using json = nlohmann::json;
 using namespace std;
 
+/*
+A standalone endpoint to test loading before it got integrated into main.cpp
+This is now deprecated thanks to parse_FOLD.cpp and will get deleted soon
+*/
+
 typedef struct {
     string frame_title;
     vector<point_t> vertices_coords;
