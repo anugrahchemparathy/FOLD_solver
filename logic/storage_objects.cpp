@@ -10,10 +10,10 @@ std::string point_2_string(point_t point){
 
 
 /*
-DEFINING POLYGON CLASS
+DEFINING polygon_t CLASS
 */
 
-Polygon::Polygon(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices) {
+polygon_t::polygon_t(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices) {
     this->vertex_indices = vertex_indices;
     this->num_points = num_points;
 
@@ -22,7 +22,7 @@ Polygon::Polygon(std::vector<int> &vertex_indices, int num_points, std::vector<p
     }
 }
 
-std::string Polygon::toString(){
+std::string polygon_t::toString(){
     std::string representation = "";
     for (int i = 0; i < num_points; i++){
         representation += point_2_string(this->vertex_coords[i]);
@@ -30,15 +30,15 @@ std::string Polygon::toString(){
     return representation;
 }
 
-FoldingPolygon Polygon::create_FoldingPolygon() {
-    return FoldingPolygon(this->vertex_coords, this->num_points);
+folding_polygon_t polygon_t::create_folding_polygon_t() {
+    return folding_polygon_t(this->vertex_coords, this->num_points);
 }
 
-std::vector<point_t> Polygon::get_points() {
+std::vector<point_t> polygon_t::get_points() {
     return this->vertex_coords;
 }
 
-std::vector<edge_t> Polygon::get_edges() {
+std::vector<edge_t> polygon_t::get_edges() {
     std::vector<edge_t> edges;
     for (int i = 0; i < this->num_points - 1; i++) {
         edge_t curr_edge = {this->vertex_coords[i], this->vertex_coords[i+1]};
@@ -50,7 +50,7 @@ std::vector<edge_t> Polygon::get_edges() {
     return edges;
 }
 
-std::vector<undirected_edge_t> Polygon::get_undirected_edges() {
+std::vector<undirected_edge_t> polygon_t::get_undirected_edges() {
     std::vector<undirected_edge_t> index_edges;
     for (int i = 0; i < this->num_points - 1; i++) {
         int first = MIN(this->vertex_indices[i], this->vertex_indices[i+1]);
@@ -65,14 +65,14 @@ std::vector<undirected_edge_t> Polygon::get_undirected_edges() {
 }
 
 /*
-Defining FoldingPolygon class
+DEFINING folding_polygon_t CLASS
 */
 
-FoldingPolygon::FoldingPolygon(std::vector<point_t> &vertex_coords, int num_points){
+folding_polygon_t::folding_polygon_t(std::vector<point_t> &vertex_coords, int num_points){
     this->vertex_coords = vertex_coords;
     this->num_points = num_points;
 }
 
-int FoldingPolygon::get_num_points(){
+int folding_polygon_t::get_num_points(){
     return this->num_points;
 }
