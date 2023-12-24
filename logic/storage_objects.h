@@ -19,6 +19,10 @@ typedef struct point_t{
         if (x != other.x) return x < other.x;
         return y < other.y;
     }
+    bool operator>(const point_t& other) const {
+        if (x != other.x) return x > other.x;
+        return y > other.y;
+    }
     bool operator!=(const point_t& other) const {
         return x != other.x || y != other.y;
     }
@@ -97,12 +101,12 @@ class polygon_t {
         int num_points;
     public:
         polygon_t(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices);
+        polygon_t(std::vector<point_t> &polygon_vertices);
         
         std::string toString();
         folding_polygon_t create_folding_polygon_t();
         std::vector<point_t> get_points();
         std::vector<edge_t> get_edges();
-        std::vector<undirected_edge_t> get_undirected_edges();
         int get_num_points();
 };
 
