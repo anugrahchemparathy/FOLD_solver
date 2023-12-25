@@ -1,5 +1,7 @@
 /*
 ==============================================================================
+Base code to get important data structures from a parsed fold
+This code could be placed directly in main, but is relocated here for clarity
 Get Datastructures
 ==============================================================================
 */
