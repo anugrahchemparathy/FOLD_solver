@@ -23,10 +23,17 @@ parse_FOLD.o: parse_FOLD.cpp parse_FOLD.h
 clean:
 	rm -f *.o main
 
-run:
+trial:
 	make clean
 	make
 	./main
 
+run:
+	make clean
+	make
+	./main
+	python3 visualize.py
+	rm out.json
 
-.PHONY: clean run
+
+.PHONY: clean trial run
