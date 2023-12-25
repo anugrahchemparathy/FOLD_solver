@@ -22,6 +22,4 @@ typedef struct {
 
 parsed_fold load_fold_file(std::string filepath = "../FOLD_examples/crane.fold");
 
-void dump_polygons(std::vector<polygon_t> all_polygons);
-
 #endif

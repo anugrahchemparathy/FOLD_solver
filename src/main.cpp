@@ -10,6 +10,7 @@
 #include "FOLD_datatypes.h"
 #include "FOLD_parse.h"
 #include "FOLD_utils.h"
+#include "FOLD_endpoint.h"
 #include "get_structures.cpp"
 
 std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &vertex_adjacents, 
@@ -96,6 +97,9 @@ std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &ver
                 break;
             }
             if (polygon_vertices.size() > 100){
+                // some bug happened, so just break out of the loop and report it!
+                // TODO: change this to an assert
+                std::cout << "polygon_vertices.size() > 100, so breaking out of loop" << std::endl;
                 for (int i = 0 ; i < 5; i++){
                     std::cout << "polygon_vertices[" << std::to_string(i) << "] = " << point_2_string(polygon_vertices[i]) << std::endl;
                 }
@@ -132,7 +136,9 @@ std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &ver
 
 // main function
 int main() {
-    parsed_fold skeleton = load_fold_file();
+    // default arg: "../FOLD_examples/crane.fold"
+    std::string filepath = "../FOLD_examples/kite.fold";
+    parsed_fold skeleton = load_fold_file(filepath);
     std::cout << "skeleton failed = " << skeleton.failed << std::endl;
     std::cout << "skeleton num_edges = " << skeleton.num_edges << " & num_vertices = " << skeleton.num_vertices << std::endl; 
 

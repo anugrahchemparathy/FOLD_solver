@@ -5,17 +5,17 @@ CPPFLAGS = -Wall -std=c++17
 
 TARGET := main
 # options: main, (deprecated and removed) load
-SOURCES_BASE = FOLD_datatypes FOLD_parse FOLD_utils
+SOURCES_BASE = FOLD_datatypes FOLD_parse FOLD_utils FOLD_endpoint
 CPP_FILES = $(SOURCES_BASE:=.cpp)
 H_FILES = $(SOURCES_BASE:=.h)
 
 
 
 # default target = main
-main: $(TARGET).o FOLD_datatypes.o FOLD_parse.o FOLD_utils.o
-	$(CXX) $(CPPFLAGS) -o main $(TARGET).o FOLD_datatypes.o FOLD_parse.o FOLD_utils.o
+main: $(TARGET).o FOLD_datatypes.o FOLD_parse.o FOLD_utils.o FOLD_endpoint.o
+	$(CXX) $(CPPFLAGS) -o main $(TARGET).o FOLD_datatypes.o FOLD_parse.o FOLD_utils.o FOLD_endpoint.o
 
-$(TARGET).o: FOLD_visualize.py $(TARGET).cpp $(CPP_FILES) $(H_FILES)
+$(TARGET).o: FOLD_visualize.py $(TARGET).cpp $(H_FILES)
 	$(CXX) $(CPPFLAGS) -c $(TARGET).cpp
 
 FOLD_datatypes.o: FOLD_datatypes.cpp FOLD_datatypes.h
@@ -26,6 +26,9 @@ FOLD_parse.o: FOLD_parse.cpp FOLD_parse.h
 
 FOLD_utils.o: FOLD_utils.cpp FOLD_utils.h
 	$(CXX) $(CPPFLAGS) -c FOLD_utils.cpp
+
+FOLD_endpoint.o: FOLD_endpoint.cpp FOLD_endpoint.h
+	$(CXX) $(CPPFLAGS) -c FOLD_endpoint.cpp
 
 
 clean:
