@@ -25,7 +25,7 @@ polygon_t::polygon_t(std::vector<point_t> &vertex_coords){
     this->num_points = vertex_coords.size();
 }
 
-std::string polygon_t::toString(){
+std::string polygon_t::toString() const{
     std::string representation = "";
     for (int i = 0; i < num_points; i++){
         representation += point_2_string(this->vertex_coords[i]);
@@ -54,6 +54,13 @@ std::vector<edge_t> polygon_t::get_edges() {
     edges.push_back(last_edge);
 
     return edges;
+}
+
+
+
+std::ostream& operator<<(std::ostream& os,  polygon_t const& p) {
+    os << p.toString();
+    return os;
 }
 
 /*

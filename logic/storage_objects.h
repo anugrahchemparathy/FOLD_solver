@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 #include "utils.h"
 
 
@@ -103,12 +104,16 @@ class polygon_t {
         polygon_t(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices);
         polygon_t(std::vector<point_t> &polygon_vertices);
         
-        std::string toString();
+        std::string toString() const;
+        // friend std::ostream& operator<<(std::ostream& os, const polygon_t& p);
+        
         folding_polygon_t create_folding_polygon_t();
         std::vector<point_t> get_points();
         std::vector<edge_t> get_edges();
         int get_num_points();
 };
+
+std::ostream& operator<<(std::ostream& os, const polygon_t& p);
 
 
 
