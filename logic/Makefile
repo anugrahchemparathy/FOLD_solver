@@ -4,20 +4,28 @@ CXX = c++
 CPPFLAGS = -Wall -std=c++17
 
 TARGET := main
-# options: main, load
+# options: main, (deprecated and removed) load
+SOURCES_BASE = FOLD_datatypes FOLD_parse FOLD_utils
+CPP_FILES = $(SOURCES_BASE:=.cpp)
+H_FILES = $(SOURCES_BASE:=.h)
+
+
 
 # default target = main
-main: $(TARGET).o storage_objects.o parse_FOLD.o
-	$(CXX) $(CPPFLAGS) -o main $(TARGET).o storage_objects.o parse_FOLD.o
+main: $(TARGET).o FOLD_datatypes.o FOLD_parse.o FOLD_utils.o
+	$(CXX) $(CPPFLAGS) -o main $(TARGET).o FOLD_datatypes.o FOLD_parse.o FOLD_utils.o
 
-$(TARGET).o: $(TARGET).cpp storage_objects.h
+$(TARGET).o: FOLD_visualize.py $(TARGET).cpp $(CPP_FILES) $(H_FILES)
 	$(CXX) $(CPPFLAGS) -c $(TARGET).cpp
 
-storage_objects.o: storage_objects.cpp storage_objects.h
-	$(CXX) $(CPPFLAGS) -c storage_objects.cpp
+FOLD_datatypes.o: FOLD_datatypes.cpp FOLD_datatypes.h
+	$(CXX) $(CPPFLAGS) -c FOLD_datatypes.cpp
 
-parse_FOLD.o: parse_FOLD.cpp parse_FOLD.h
-	$(CXX) $(CPPFLAGS) -c parse_FOLD.cpp
+FOLD_parse.o: FOLD_parse.cpp FOLD_parse.h
+	$(CXX) $(CPPFLAGS) -c FOLD_parse.cpp
+
+FOLD_utils.o: FOLD_utils.cpp FOLD_utils.h
+	$(CXX) $(CPPFLAGS) -c FOLD_utils.cpp
 
 
 clean:
@@ -32,7 +40,7 @@ run:
 	make clean
 	make
 	./main
-	python3 visualize.py
+	python3 FOLD_visualize.py
 	rm out.json
 
 

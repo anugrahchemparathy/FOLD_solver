@@ -7,7 +7,7 @@
 #include <string>
 
 #include <nlohmann/json.hpp>
-#include "storage_objects.h"
+#include "FOLD_datatypes.h"
 
 using json = nlohmann::json;
 

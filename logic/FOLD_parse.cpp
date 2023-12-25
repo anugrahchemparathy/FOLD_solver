@@ -1,4 +1,4 @@
-#include "parse_FOLD.h"
+#include "FOLD_parse.h"
 
 parsed_fold load_fold_file(std::string filepath){
     parsed_fold skeleton;

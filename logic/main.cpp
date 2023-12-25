@@ -7,10 +7,10 @@
 #include <math.h>
 
 
-#include "storage_objects.h"
-#include "parse_FOLD.h"
+#include "FOLD_datatypes.h"
+#include "FOLD_parse.h"
+#include "FOLD_utils.h"
 #include "get_structures.cpp"
-#include "fold_utils.h"
 
 std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &vertex_adjacents, 
           std::vector<edge_t> &all_edges, 
