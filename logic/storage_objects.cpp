@@ -8,6 +8,14 @@ std::string point_2_string(point_t point){
     return "Point(" + std::to_string(point.x) + ", " + std::to_string(point.y) + ")";
 }
 
+/*
+HELPERS FOR  EDGE STRUCT
+*/
+std::ostream& operator<<(std::ostream& os, const edge_t& e) {
+    os << point_2_string(e.start) << "->" << point_2_string(e.end) << std::endl;
+    return os;
+}
+
 
 /*
 DEFINING polygon_t CLASS
@@ -54,6 +62,10 @@ std::vector<edge_t> polygon_t::get_edges() {
     edges.push_back(last_edge);
 
     return edges;
+}
+
+int polygon_t::get_num_points() {
+    return this->num_points;
 }
 
 

@@ -27,6 +27,9 @@ typedef struct point_t{
     bool operator!=(const point_t& other) const {
         return x != other.x || y != other.y;
     }
+    bool operator==(const point_t& other) const {
+        return x == other.x && y == other.y;
+    }
 } point_t;
 
 // another (unused) way to implement comparison for point_t
@@ -53,20 +56,11 @@ typedef struct edge_t {
         if (start != other.start) return start < other.start;
         return end < other.end;
     }
-} edge_t;
-
-// another (unused) way to implement comparison for edge_t
-struct compare_edge_t {
-    compare_point_t point_comparator;
-
-    bool operator()(const edge_t& a, const edge_t& b) const {
-        // check if start > or <
-        if (point_comparator(a.start, b.start)) return true;
-        if (point_comparator(b.start, a.start)) return false;
-        // if start ==, check end
-        return point_comparator(a.end, b.end);
+    bool operator==(const edge_t& other) const {
+        return start == other.start && end == other.end;
     }
-};
+} edge_t;
+std::ostream& operator<<(std::ostream& os, const edge_t& e);
 
 
 // undirected edges according to sorted order
@@ -114,7 +108,5 @@ class polygon_t {
 };
 
 std::ostream& operator<<(std::ostream& os, const polygon_t& p);
-
-
 
 #endif
