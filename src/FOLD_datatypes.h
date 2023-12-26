@@ -93,7 +93,9 @@ class polygon_t {
     private:
         std::vector<int> vertex_indices;
         std::vector<point_t> vertex_coords;
+        std::vector<polygon_t> neighbors;
         int num_points;
+        bool neighbors_filled;
     public:
         polygon_t(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices);
         polygon_t(std::vector<point_t> &polygon_vertices);
@@ -101,8 +103,12 @@ class polygon_t {
         std::string toString() const;
         // friend std::ostream& operator<<(std::ostream& os, const polygon_t& p);
         
+        void add_neighbor(edge_t edge, polygon_t neighbor);
+        void neighbors_complete();
+
         folding_polygon_t create_folding_polygon_t();
         std::vector<point_t> get_points();
+        std::vector<polygon_t> get_neighbors();
         std::vector<edge_t> get_edges();
         int get_num_points();
 };

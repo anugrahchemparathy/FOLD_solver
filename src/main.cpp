@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <set>
 #include <string>
 
 #include <limits>
@@ -15,7 +16,6 @@
 
 std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &vertex_adjacents, 
           std::vector<edge_t> &all_edges, 
-          std::map<edge_t, std::vector<polygon_t>> &edge_2_polygon,
           parsed_fold &skeleton) {
 
     std::vector<polygon_t> all_polygons;
@@ -126,19 +126,61 @@ std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &ver
 
         polygon_t polygon = polygon_t(polygon_vertices);
         all_polygons.push_back(polygon);
-
-
+        // std::vector<edge_t> polygon_edges = polygon.get_edges();
+        // for (auto edge: polygon_edges){
+        //     edge_2_polygon[edge].push_back(polygon);
+        // }
     }
-
     return all_polygons;
 }
 
+void fill_neighbors(std::vector<polygon_t> &all_polygons){
+    std::map<edge_t, polygon_t> edge_2_polygon;
+
+    for (auto polygon: all_polygons){
+        for (auto edge: polygon.get_edges()){
+            auto it = edge_2_polygon.find(edge);
+            if (it != edge_2_polygon.end()){
+                polygon_t other_polygon = it->second;
+                polygon.add_neighbor(edge, other_polygon);
+                other_polygon.add_neighbor(edge, other_polygon);
+            } else {
+                edge_2_polygon.emplace(edge, polygon);
+            }
+        }
+    }
+
+    // set all polygons to have valid neighbors
+    for (auto polygon: all_polygons){
+        polygon.neighbors_complete();
+    }
+}
+
+/*
+// TODO: implement < operator
+std::vector<folding_polygon_t> DFS(polygon_t &start_polygon, std::set<polygon_t> &visited) {
+    std::vector<folding_polygon_t> folded_form;
+    visited.insert(start_polygon);
+
+    for (auto neighbor: start_polygon.get_neighbors()){
+
+    }
+
+}
+*/
 
 // main function
 int main() {
+    // TODO: allow filepath specification as command line argument
+
+    // OPTION 1: custom filepath
+    // std::string filepath = "../FOLD_examples/kite.fold";
+    // parsed_fold skeleton = load_fold_file(filepath);
+
+    // OPTION 2: default filepath
     // default arg: "../FOLD_examples/crane.fold"
-    std::string filepath = "../FOLD_examples/kite.fold";
-    parsed_fold skeleton = load_fold_file(filepath);
+    parsed_fold skeleton = load_fold_file();
+
     std::cout << "skeleton failed = " << skeleton.failed << std::endl;
     std::cout << "skeleton num_edges = " << skeleton.num_edges << " & num_vertices = " << skeleton.num_vertices << std::endl; 
 
@@ -164,15 +206,23 @@ int main() {
     std::vector<edge_t> all_edges = get_structure_B(skeleton);
 
     // Data Structure C: mapping of edge -> [polygons] (max size of list is 2 since at most 2 polygons per edge)
-    std::map<edge_t, std::vector<polygon_t>> edge_2_polygon = get_structure_C(skeleton);
+    // std::map<edge_t, std::vector<polygon_t>> edge_2_polygon = get_structure_C(skeleton);
 
 
     /*
     Compute polygons using interior hull
     */
-    std::vector<polygon_t> all_polygons = get_polygons(vertex_adjacents, all_edges, edge_2_polygon, skeleton);
+    std::vector<polygon_t> all_polygons = get_polygons(vertex_adjacents, all_edges, skeleton);
 
     dump_polygons(all_polygons);
+    fill_neighbors(all_polygons);
+
+    // std::set<polygon_t> visited;
+    // std::vector<folding_polygon_t> folded_form = DFS(all_polygons[0], visited);
+
+    // folded_form = DFS(all_polygons[0], set(), vertices, edge_2_polygon)
+
+
 
     return 0;
 }

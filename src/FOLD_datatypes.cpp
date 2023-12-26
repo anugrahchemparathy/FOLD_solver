@@ -23,6 +23,7 @@ DEFINING polygon_t CLASS
 
 polygon_t::polygon_t(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices) {
     this->num_points = num_points;
+    this->neighbors_filled = false;
     for (int i = 0; i < num_points; i++){
         this->vertex_coords.push_back(all_vertices[vertex_indices[i]]);
     }
@@ -40,6 +41,15 @@ std::string polygon_t::toString() const{
     }
     return representation;
 }
+
+
+void polygon_t::add_neighbor(edge_t edge, polygon_t neighbor) {
+    this->neighbors.push_back(neighbor);
+}
+void polygon_t::neighbors_complete(){
+    this->neighbors_filled = true;
+}
+
 
 folding_polygon_t polygon_t::create_folding_polygon_t() {
     return folding_polygon_t(this->vertex_coords, this->num_points);
@@ -62,6 +72,11 @@ std::vector<edge_t> polygon_t::get_edges() {
     edges.push_back(last_edge);
 
     return edges;
+}
+
+std::vector<polygon_t> polygon_t::get_neighbors() {
+    // todo: raise error if called before neighbors_filled is true
+    return this->neighbors;
 }
 
 int polygon_t::get_num_points() {
