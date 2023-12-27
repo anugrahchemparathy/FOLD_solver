@@ -12,7 +12,7 @@ def run_visualization(folded_form, clear_vis = True):
 
     def draw_polygon(canvas, points, outline_color = 'white', clear_vis = True):
         scale = lambda x: 600 * (x) + 100
-        jitter = np.random.randn() * 3 # to help visualize distinct polygons if edges overlap
+        jitter = np.random.randn() * 4 # to help visualize distinct polygons if edges overlap
         transform = lambda x: scale(x) + (jitter if not clear_vis else 0)
         
         new_points = []
@@ -22,10 +22,11 @@ def run_visualization(folded_form, clear_vis = True):
         canvas.create_polygon(new_points, outline=outline_color, fill='', width=0.1)
 
     tkinter_colors = [
-        "white", "red", "green", "blue", "cyan", "yellow",
+        "white", "red", "green", "cyan", "yellow",
         "orange", "purple", "pink",
         "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#FFA07A"
     ]
+    # tkinter_colors = ['white']
 
     for polygon_points in folded_form:
         color = random.choice(tkinter_colors)
@@ -50,4 +51,5 @@ def get_form(filepath):
 if __name__ == "__main__":
     filepath = "out.json"
     folded_form = get_form(filepath)
-    run_visualization(folded_form, clear_vis=False)
+    run_visualization(folded_form, clear_vis=True)
+    # run_visualization(folded_form, clear_vis=False)
