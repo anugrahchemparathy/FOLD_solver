@@ -46,10 +46,10 @@ std::string polygon_t::toString() const{
 }
 
 
-void polygon_t::add_neighbor(edge_t &edge, polygon_t &neighbor) {
-    std::cout << "1: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << std::endl;
-    this->neighbors.push_back(std::make_pair(edge, neighbor));
-    std::cout << "2: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << std::endl;
+void polygon_t::add_neighbor(edge_t &edge, polygon_t* neighbor_ptr) {
+    std::cout << "1: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << "," << std::endl;
+    this->neighbors.push_back(std::make_pair(edge, neighbor_ptr));
+    std::cout << "2: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << "," << std::endl;
 }
 void polygon_t::neighbors_complete(){
     this->neighbors_filled = true;
@@ -82,7 +82,7 @@ std::vector<edge_t> polygon_t::get_edges() {
     return edges;
 }
 
-std::vector<std::pair<edge_t, polygon_t>> polygon_t::get_neighbors() {
+std::vector<std::pair<edge_t, polygon_t*>> polygon_t::get_neighbors() {
     // todo: raise error if called before neighbors_filled is true
     return this->neighbors;
 }

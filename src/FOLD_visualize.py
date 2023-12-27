@@ -26,7 +26,7 @@ def run_visualization(folded_form, clear_vis = True):
         "orange", "purple", "pink",
         "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#FFA07A"
     ]
-    # tkinter_colors = ['white']
+    tkinter_colors = ['white']
 
     for polygon_points in folded_form:
         color = random.choice(tkinter_colors)
@@ -46,10 +46,11 @@ def get_form(filepath):
             polygon.append((vertex["x"], vertex["y"]))
         
         folded_form.append(polygon)
+    # print(folded_form)
     return folded_form
 
 if __name__ == "__main__":
     filepath = "out.json"
     folded_form = get_form(filepath)
-    run_visualization(folded_form, clear_vis=True)
-    # run_visualization(folded_form, clear_vis=False)
+    # run_visualization(folded_form, clear_vis=True)
+    run_visualization(folded_form, clear_vis=False)
