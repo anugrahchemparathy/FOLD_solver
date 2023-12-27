@@ -38,7 +38,10 @@ Note that this repository does not do pre-checking for mountain/valley assignmen
 
 
 ## How to use
-In case anybody is interested in trying the code, you can easily run the cpp implementation on the traditional crane crease pattern with the following commands:
+In case anybody is interested in trying the code, you will need the [`nlohmann:json`](https://github.com/nlohmann/json) package. You can probably get it from the github repo or the [releases page](json.nlohmann.me/home/releases/).
+
+
+Once done, you can easily run the cpp implementation on the traditional crane crease pattern with the following commands:
 
     cd src
     make run
@@ -75,7 +78,7 @@ By default the code simulates the `crane.fold` file in the `FOLD_examples` direc
 
 
 ### Visualizing Layers
-One drawback of tkinter is that it can be very hard to visualize the many overlapping layers of a folded origami. Also, when writing my polygon generating code it was valuable to be able to visualize every polygon's boundaries individually at once (which can otherwise be difficult due to shared edges). So I added an alternate visual mode in `FOLD_visualize.py` accessiblye by setting `clear_vis = False` in the python code to randomly shift every polygon by a small amount and color every polygon a random color.
+One drawback of tkinter is that it can be very hard to visualize the many overlapping layers of a folded origami. Also, when writing my polygon generating code it was valuable to be able to visualize every polygon's boundaries individually at once (which can otherwise be difficult due to shared edges). So I added an alternate visual mode in `FOLD_visualize.py` accessible by setting `clear_vis = False` in the python code to randomly shift every polygon by a small amount and color every polygon a random color.
 
 <p align="center">
   <img src="images/crane_folded_random.png" height="400" />
