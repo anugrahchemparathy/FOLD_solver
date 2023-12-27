@@ -14,12 +14,12 @@ def run_visualization(folded_form, clear_vis = True):
         scale = lambda x: 600 * x + 100
 
         # OPTION 1: jitter entire polygon at once
-        jitter = lambda : np.random.randn() * 4 # to help visualize distinct polygons if edges overlap
-        transform = lambda x: scale(x) + (jitter() if not clear_vis else 0)
+        jitter = np.random.randn() * 3 # to help visualize distinct polygons if edges overlap
+        transform = lambda x: scale(x) + (jitter if not clear_vis else 0)
 
         # OPTION 2: jitter points individually for every polygon
-        # jitter = np.random.randn() * 3 # to help visualize distinct polygons if edges overlap
-        # transform = lambda x: scale(x) + (jitter if not clear_vis else 0)
+        # jitter = lambda : np.random.randn() * 4 # to help visualize distinct polygons if edges overlap
+        # transform = lambda x: scale(x) + (jitter() if not clear_vis else 0)
 
 
         new_points = []
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     folded_form = get_form(filepath)
 
     # OPTION 1: visualize without jitter
-    # run_visualization(folded_form, clear_vis=True)
+    run_visualization(folded_form, clear_vis=True)
 
     # OPTION 2: visualize with jitter and randomly colored polygons
-    run_visualization(folded_form, clear_vis=False)
+    # run_visualization(folded_form, clear_vis=False)
