@@ -81,6 +81,7 @@ class folding_polygon_t {
 
         std::vector<point_t> get_points();
         int get_num_points();
+        int get_unique_id();
 
         void fold(edge_t edge);
 };

@@ -9,6 +9,7 @@ std::string point_2_string(point_t point){
 }
 
 void reflect(const double &m, const double &b, point_t &p) {
+    p.y -= b;
     double new_x = ((1 - (m * m)) * p.x + (2 * m) * p.y) / (1 + (m * m));
     double new_y = ((2 * m) * p.x + ((m * m) - 1) * p.y) / (1 + (m * m));
     new_y += b;
@@ -47,9 +48,7 @@ std::string polygon_t::toString() const{
 
 
 void polygon_t::add_neighbor(edge_t &edge, polygon_t* neighbor_ptr) {
-    std::cout << "1: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << "," << std::endl;
     this->neighbors.push_back(std::make_pair(edge, neighbor_ptr));
-    std::cout << "2: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << "," << std::endl;
 }
 void polygon_t::neighbors_complete(){
     this->neighbors_filled = true;
@@ -118,7 +117,8 @@ void folding_polygon_t::fold(edge_t edge){
     double dx = second.x - first.x;
 
     if (dx == 0) {
-        // TODO: fill in
+        // reflection across a vertical line 
+        // slope is undefined, so we handle this separately
         double rx = first.x;
         for (auto &p: this->vertex_coords){
             p.x = rx - (p.x - rx);
@@ -139,4 +139,8 @@ std::vector<point_t> folding_polygon_t::get_points() {
 
 int folding_polygon_t::get_num_points(){
     return this->num_points;
+}
+
+int folding_polygon_t::get_unique_id(){
+    return this->unique_id;
 }
