@@ -8,11 +8,20 @@ std::string point_2_string(point_t point){
     return "Point(" + std::to_string(point.x) + ", " + std::to_string(point.y) + ")";
 }
 
+void reflect(const double &m, const double &b, point_t &p) {
+    double new_x = ((1 - (m * m)) * p.x + (2 * m) * p.y) / (1 + (m * m));
+    double new_y = ((2 * m) * p.x + ((m * m) - 1) * p.y) / (1 + (m * m));
+    new_y += b;
+
+    p.x = new_x;
+    p.y = new_y;
+}
+
 /*
 HELPERS FOR  EDGE STRUCT
 */
 std::ostream& operator<<(std::ostream& os, const edge_t& e) {
-    os << point_2_string(e.start) << "->" << point_2_string(e.end) << std::endl;
+    os << point_2_string(e.start) << "->" << point_2_string(e.end);
     return os;
 }
 
@@ -21,17 +30,11 @@ std::ostream& operator<<(std::ostream& os, const edge_t& e) {
 DEFINING polygon_t CLASS
 */
 
-polygon_t::polygon_t(std::vector<int> &vertex_indices, int num_points, std::vector<point_t> &all_vertices) {
-    this->num_points = num_points;
-    this->neighbors_filled = false;
-    for (int i = 0; i < num_points; i++){
-        this->vertex_coords.push_back(all_vertices[vertex_indices[i]]);
-    }
-}
-
-polygon_t::polygon_t(std::vector<point_t> &vertex_coords){
+polygon_t::polygon_t(std::vector<point_t> &vertex_coords, int unique_id){
     this->vertex_coords = vertex_coords;
     this->num_points = vertex_coords.size();
+    this->unique_id = unique_id;
+    this->neighbors_filled = false;
 }
 
 std::string polygon_t::toString() const{
@@ -43,8 +46,10 @@ std::string polygon_t::toString() const{
 }
 
 
-void polygon_t::add_neighbor(edge_t edge, polygon_t neighbor) {
-    this->neighbors.push_back(neighbor);
+void polygon_t::add_neighbor(edge_t &edge, polygon_t &neighbor) {
+    std::cout << "1: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << std::endl;
+    this->neighbors.push_back(std::make_pair(edge, neighbor));
+    std::cout << "2: neighbors size = " << this->neighbors.size() << ", unique_id = " << this->unique_id << std::endl;
 }
 void polygon_t::neighbors_complete(){
     this->neighbors_filled = true;
@@ -68,21 +73,26 @@ std::vector<edge_t> polygon_t::get_edges() {
         edge_t curr_edge = {first, second};
         edges.push_back(curr_edge);
     }
-    edge_t last_edge = {this->vertex_coords[num_points - 1], this->vertex_coords[0]};
+
+    point_t first = MIN(this->vertex_coords[num_points - 1], this->vertex_coords[0]);
+    point_t second = MAX(this->vertex_coords[num_points - 1], this->vertex_coords[0]);
+    edge_t last_edge = {first, second};
     edges.push_back(last_edge);
 
     return edges;
 }
 
-std::vector<polygon_t> polygon_t::get_neighbors() {
+std::vector<std::pair<edge_t, polygon_t>> polygon_t::get_neighbors() {
     // todo: raise error if called before neighbors_filled is true
     return this->neighbors;
 }
 
-int polygon_t::get_num_points() {
+int polygon_t::get_num_points() const {
     return this->num_points;
 }
-
+int polygon_t::get_unique_id() const {
+    return this->unique_id;
+}
 
 
 std::ostream& operator<<(std::ostream& os,  polygon_t const& p) {
@@ -94,9 +104,37 @@ std::ostream& operator<<(std::ostream& os,  polygon_t const& p) {
 DEFINING folding_polygon_t CLASS
 */
 
-folding_polygon_t::folding_polygon_t(std::vector<point_t> &vertex_coords, int num_points){
+folding_polygon_t::folding_polygon_t(std::vector<point_t> vertex_coords, int num_points){
+    // should implicitly copy vertex coords when called
     this->vertex_coords = vertex_coords;
     this->num_points = num_points;
+}
+
+void folding_polygon_t::fold(edge_t edge){
+    point_t first = edge.start;
+    point_t second = edge.end;
+
+    double dy = second.y - first.y;
+    double dx = second.x - first.x;
+
+    if (dx == 0) {
+        // TODO: fill in
+        double rx = first.x;
+        for (auto &p: this->vertex_coords){
+            p.x = rx - (p.x - rx);
+        }
+
+    } else {
+        double m = dy / dx;
+        double b = first.y - (first.x * m);
+        for (auto &p: this->vertex_coords){
+            reflect(m, b, p);
+        }
+    }
+}
+
+std::vector<point_t> folding_polygon_t::get_points() {
+    return this->vertex_coords;
 }
 
 int folding_polygon_t::get_num_points(){

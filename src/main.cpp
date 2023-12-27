@@ -19,6 +19,7 @@ std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &ver
           parsed_fold &skeleton) {
 
     std::vector<polygon_t> all_polygons;
+    int polygon_id = 0;
     while (!all_edges.empty()) {
         // std::cout << "all_edges[0] = " << all_edges[0] << "len(all_edges) = " << all_edges.size() << std::endl << std::endl << std::endl; 
         std::vector<point_t> polygon_vertices;
@@ -119,55 +120,77 @@ std::vector<polygon_t> get_polygons(std::map<point_t, std::vector<point_t>> &ver
         if (!polygon_valid) continue;
         if (!bug_fixer) {
             std::vector<point_t> partial_vertices(polygon_vertices.begin(), polygon_vertices.begin() + 4);
-            polygon_t polygon = polygon_t(partial_vertices);
+            polygon_t polygon = polygon_t(partial_vertices, polygon_id);
+            polygon_id++;
             all_polygons.push_back(polygon);
             break;
         }
 
-        polygon_t polygon = polygon_t(polygon_vertices);
+        polygon_t polygon = polygon_t(polygon_vertices, polygon_id);
+        polygon_id++;
         all_polygons.push_back(polygon);
-        // std::vector<edge_t> polygon_edges = polygon.get_edges();
-        // for (auto edge: polygon_edges){
-        //     edge_2_polygon[edge].push_back(polygon);
-        // }
     }
     return all_polygons;
 }
 
 void fill_neighbors(std::vector<polygon_t> &all_polygons){
-    std::map<edge_t, polygon_t> edge_2_polygon;
+    std::map<edge_t, polygon_t*> edge_2_polygon;
 
-    for (auto polygon: all_polygons){
-        for (auto edge: polygon.get_edges()){
+    for (auto& polygon: all_polygons){
+        for (auto& edge: polygon.get_edges()){
             auto it = edge_2_polygon.find(edge);
             if (it != edge_2_polygon.end()){
-                polygon_t other_polygon = it->second;
-                polygon.add_neighbor(edge, other_polygon);
-                other_polygon.add_neighbor(edge, other_polygon);
+                polygon_t* other_polygon = it->second;
+
+                std::cout << "edge found P1 = " << polygon.get_unique_id() << ", P2 = " << other_polygon->get_unique_id() << std::endl;
+                polygon.add_neighbor(edge, *other_polygon);
+                other_polygon->add_neighbor(edge, polygon);
             } else {
-                edge_2_polygon.emplace(edge, polygon);
+                edge_2_polygon[edge] = &polygon;
+                // edge_2_polygon.emplace(edge, &polygon);
             }
         }
     }
 
+    std::cout << "unique_id[0] = " << all_polygons[0].get_unique_id() << ", fill neighbors = " << all_polygons[0].get_neighbors().size() << std::endl;
+    std::cout << "edgesize = " << edge_2_polygon.size() << std::endl;
+
+    // for (const auto& pair : edge_2_polygon) {
+    //     const edge_t& edge = pair.first;
+    //     std::cout << "\"" << edge << "\" ," << std::endl;
+    // }
+
     // set all polygons to have valid neighbors
-    for (auto polygon: all_polygons){
+    for (auto& polygon: all_polygons){
         polygon.neighbors_complete();
     }
 }
 
-/*
+
 // TODO: implement < operator
 std::vector<folding_polygon_t> DFS(polygon_t &start_polygon, std::set<polygon_t> &visited) {
     std::vector<folding_polygon_t> folded_form;
+    folded_form.push_back(start_polygon.create_folding_polygon_t());
     visited.insert(start_polygon);
 
-    for (auto neighbor: start_polygon.get_neighbors()){
+    // std::cout << "DFS: num_neighbors = " << start_polygon.get_neighbors().size() << std::endl;
+    for (auto edge_neighbor: start_polygon.get_neighbors()){
+        edge_t edge = edge_neighbor.first;
+        polygon_t neighbor = edge_neighbor.second;
 
+        std::cout << "edge" << edge << ", len(folded_form) = " << folded_form.size() << std::endl;
+        if (visited.count(neighbor)) continue;
+
+        std::vector<folding_polygon_t> all_polys = DFS(neighbor, visited);
+        for (auto folding_poly_neighbor : all_polys) {
+            folding_poly_neighbor.fold(edge);
+            folded_form.push_back(folding_poly_neighbor);
+        }
     }
 
+    return folded_form;
 }
-*/
+
 
 // main function
 int main() {
@@ -195,6 +218,16 @@ int main() {
     //     int num_edges;
     // } parsed_fold;
 
+    // to print vector
+    // std::vector<point_t> vertices_coords;
+    // std::vector<undirected_edge_t> edge_indexes;
+    // for (auto u_edge: skeleton.edge_indexes){
+    //     point_t first = skeleton.vertices_coords[u_edge.first];
+    //     point_t second = skeleton.vertices_coords[u_edge.second];
+
+    //     std::cout << "\"" << point_2_string(first) << "->" << point_2_string(second) << "\" ," << std::endl;
+    // }
+
 
     /*
     Load up standard datastructures
@@ -214,15 +247,31 @@ int main() {
     */
     std::vector<polygon_t> all_polygons = get_polygons(vertex_adjacents, all_edges, skeleton);
 
-    dump_polygons(all_polygons);
     fill_neighbors(all_polygons);
+    std::cout<< "len(all_polygons) = " << all_polygons.size() << std::endl;
 
-    // std::set<polygon_t> visited;
-    // std::vector<folding_polygon_t> folded_form = DFS(all_polygons[0], visited);
+
+    std::vector<polygon_t> specific_polygons;
+    // specific_polygons.push_back(all_polygons[0]);
+    // specific_polygons.push_back(all_polygons[1]);
+    // specific_polygons.push_back(all_polygons[38]);
+    // specific_polygons.push_back(all_polygons[40]);
+    // dump_polygons(specific_polygons);
+
+
+
+    // /*
+    std::set<polygon_t> visited;
+    std::vector<folding_polygon_t> folded_form = DFS(all_polygons[0], visited);
+    
+
+    // VISUALIZATION
+    // dump_polygons(all_polygons);
+    dump_folding_polygons(folded_form);
 
     // folded_form = DFS(all_polygons[0], set(), vertices, edge_2_polygon)
 
-
+    // */
 
     return 0;
 }
