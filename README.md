@@ -3,8 +3,8 @@
 This repo contains my personal cpp implementation (and also a working python prototype) of an automated folding algorithm I came up with recently. Essentially all code in this repository was written without referencing the actual source code of any other implementation that you might find, so the algorithmic approach might be different or the same as someone else's appproach to simulating origami folding (and potentially less optimized). I hope this code is interesting and educational for anyone hoping to learn about automated origami folding!
 
 You can pass in a (path to an) origami folding pattern (conventionally known as a [crease pattern](https://en.wikipedia.org/wiki/Crease_pattern)) in the [FOLD](https://github.com/edemaine/fold) file format with the following two base fields: 
-1. "vertices_coords": x,y coordinates (ranging from 0 to 1 each) for every vertex in the origami pattern.
-2. "edges_vertices": (v1, v2) pairs designating that an edge exists in the origami pattern between vertices v1 and v2. This includes the edges that lie along the four edges of the square.
+1. `"vertices_coords"`: x,y coordinates (ranging from 0 to 1 each) for every vertex in the origami pattern.
+2. `"edges_vertices"`: (v1, v2) pairs designating that an edge exists in the origami pattern between vertices v1 and v2. This includes the edges that lie along the four edges of the square.
 
 and the code in the `src` repository can automatically simulate its folding and produce a visualization.
 
@@ -54,10 +54,10 @@ There are a few options for what `make run` will automatically visualize
     // 2. The simulated folded shape
     dump_folding_polygons(folded_form);
 
-    // 3. specific polygons in the folded shape
+    // 3. specific polygons in the folded shape - mostly just for debugging.
     // std::vector<polygon_t> specific_polygons;
     // visualize specific polygons by pushing them onto this vector by the unique_id field
-    // dump_polygons(specific_polygons);
+    dump_polygons(specific_polygons);
 
 By default `make run` will produce option 2: the simualted folded shape, although by commenting out the other options in `main.cpp` you can choose one of the other visualization targets. Below you can see options 2 and 1 respectively.
 
